@@ -29,16 +29,7 @@ class ApiVoneControllerProvider implements ControllerProviderInterface
             ->assert('month', '^[1-9]|0[1-9]|1[0-2]$')
             ->assert('limit', '^\d{1,2}|100$')
             ->value('limit', 100);
-
-
-//        $routes->get("/bets/all", 'AlexKhram\\Controller\\ApiController::all');
-//        $routes->get("/bets/uniq", 'AlexKhram\\Controller\\ApiController::uniq');
-//        $routes->get("/bets/stat/{team1}/{team2}", 'AlexKhram\\Controller\\ApiController::stat')
-//            ->assert('team1', '[a-zA-Z]+')
-//            ->assert('team2', '[a-zA-Z]+');
-//        $routes->post("/bets", 'AlexKhram\\Controller\\ApiController::save');
-
-
+        
         return $routes;
     }
 }

@@ -31,7 +31,7 @@ $app->before(function (Request $request) {
 //    return new Bet();
 //});
 
-//TopRep reposittory
+//TopRep repository
 $app['repository.toprep'] = function () use ($app) {
         return new DoctrineTopRepRepository($app);
     };

@@ -11,14 +11,6 @@ namespace AlexKhram\Repositories;
 
 interface TopRepRepositoryInterface
 {
-//    /**
-//     * Save bet
-//     *
-//     * @param Bet $bet
-//     * @return boolean
-//     */
-//    public function saveBet(Bet $bet);
-
     /**
      * Get list of top repositories by specified table by specified year
      *
@@ -50,5 +42,4 @@ interface TopRepRepositoryInterface
      * @return array of available languages (db tables)
      */
     public function getLanguages();
-
 }

@@ -24,4 +24,14 @@ class TopRepModel
         'created_at',
         'updated_at',
     ];
+
+    public $models = [
+        'top',
+        'go',
+        'java',
+        'js',
+        'php',
+        'python',
+        'ruby',
+    ];
 }

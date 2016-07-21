@@ -9,7 +9,7 @@ namespace AlexKhram\Controllers;
 
 use Silex\Application;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpFoundation\Response;
+
 
 
 
@@ -35,7 +35,8 @@ class ApiVoneController
     {
         $data = $app["repository.toprep"]->getLanguages();
 
-        return new Response(stripcslashes(json_encode($data)));
+        return $app->json($data);
+        
     }
 
     public function topYear(Application $app, $table, $year, $limit)
@@ -46,7 +47,8 @@ class ApiVoneController
             throw new NotFoundHttpException;
         }
 
-        return new Response(stripcslashes(json_encode($data)));
+        return $app->json($data);
+
     }
 
     public function topMonth(Application $app, $table, $year, $month, $limit)
@@ -55,9 +57,12 @@ class ApiVoneController
         $data = $app["repository.toprep"]->getTopRepByMonth($table, $year, $month, $limit);
 
         if (!$data) {
+
             throw new NotFoundHttpException;
         }
 
-        return new Response(stripcslashes(json_encode($data)));
+        return $app->json($data);
+
+
     }
 }
