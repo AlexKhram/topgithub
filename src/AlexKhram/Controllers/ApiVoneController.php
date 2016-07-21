@@ -45,7 +45,7 @@ class ApiVoneController
         if (!$data) {
             throw new NotFoundHttpException;
         }
-       var_dump($app["response"]);
+
         return new Response(stripcslashes(json_encode($data)));
     }
 
