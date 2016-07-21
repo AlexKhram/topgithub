@@ -19,6 +19,7 @@ class ApiVoneControllerProvider implements ControllerProviderInterface
         $routes = $app['controllers_factory'];
 
         $routes->get("/info", 'AlexKhram\\Controllers\\ApiVoneController::info');
+        $routes->get("/lang", 'AlexKhram\\Controllers\\ApiVoneController::lang');
         $routes->get("/year/{table}/{year}/{limit}", 'AlexKhram\\Controllers\\ApiVoneController::topYear')
             ->assert('year', '^20\d{2}$')
             ->assert('limit', '^\d{1,2}|100$')

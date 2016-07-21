@@ -16,20 +16,20 @@ class DoctrineTopRepRepository implements TopRepRepositoryInterface
     private $app;
     private $models = [
         'top',
-        'topgo',
-        'topjava',
-        'topjs',
-        'topphp',
-        'toppython',
-        'topruby',
+        'go',
+        'java',
+        'js',
+        'php',
+        'python',
+        'ruby',
     ];
-
 
 
     public function __construct(Application $app)
     {
         $this->app = $app;
     }
+
     /**
      * Get list of top repositories by specified table by specified year
      *
@@ -49,8 +49,25 @@ class DoctrineTopRepRepository implements TopRepRepositoryInterface
 
         $baseModel = new TopRepModel();
         $fields = implode(', ', $baseModel->fields);
-//var_dump("SELECT {$fields}, sum(repo_star) as repo_star FROM {$table} WHERE stat_year={$year} GROUP BY 1 order by sum(repo_star) DESC LIMIT {$limit}");
-        return $this->app['db']->fetchAll("SELECT {$fields}, sum(repo_star) as repo_star FROM {$table} WHERE stat_year={$year} GROUP BY 1 order by sum(repo_star) DESC LIMIT {$limit}");
+
+        return $this->app['db']->fetchAll("SELECT {$fields}, sum(repo_star) as repo_star
+FROM {$table}
+WHERE stat_year={$year}
+GROUP BY 1
+ORDER BY sum(repo_star) DESC
+LIMIT {$limit}");
+
+
+//        $stmt = $this->app['db']->createQueryBuilder()
+//            ->select("{$fields}, sum(repo_star) as repo_star ")
+//            ->from($table)
+//            ->where("stat_year={$year}")
+//            ->groupBy("1")
+//            ->orderBy("sum(repo_star)", "DESC")
+//            ->setMaxResults($limit)
+//            ->execute();
+//        $data = $stmt->fetchAll();
+//        return $data;
     }
 
     /**
@@ -70,5 +87,16 @@ class DoctrineTopRepRepository implements TopRepRepositoryInterface
         };
 
         return $this->app['db']->fetchAll("SELECT * FROM {$table} WHERE stat_year={$year} and stat_month={$month} ORDER BY repo_star DESC LIMIT {$limit}");
+    }
+
+    public function getLanguages()
+    {
+        $tables = $this->app['db']->getSchemaManager()->listTables();
+        $data = [];
+        foreach ($tables as $table) {
+            $data[] = $table->getName();
+        }
+
+        return $data;
     }
 }

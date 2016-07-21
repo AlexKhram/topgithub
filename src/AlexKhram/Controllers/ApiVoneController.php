@@ -1,69 +1,63 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: AlexKhram
- * Date: 19.07.16
+ * User: AlexKhram 19.07.16
  * Time: 14:55
  */
 
 namespace AlexKhram\Controllers;
 
 use Silex\Application;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpFoundation\Response;
+
 
 
 class ApiVoneController
 {
     public function info(Application $app)
     {
-        $message = "List of available methods api 'bets': </br>";
-        $message .= "+  - GET /info - returns this info;</br>";
-        $message .= "+  - GET /top/{year} - returns list of top repository by year;</br>";
-        $message .= "+  - GET /top/{year}/{month} - returns list of top repository by month;</br>";
-        $message .= "+  - GET /topgo/{year} - returns list of top 'Go' repository by year;</br>";
-        $message .= "+  - GET /topgo/{year}/{month} - returns list of top 'Go' repository by month;</br>";
+        $message = "You can see top github repositories with next programing language: 'go', 'java', 'js', 'php', 'python','ruby'. ";
+        $message .= "Also you can see top github repository with all languages by using language 'top'.</br>";
+        $message .= "List of available methods api 'topgithub': </br>";
+        $message .= "GET http://{$_SERVER['HTTP_HOST']}/info - returns this info;</br>";
+        $message .= "GET http://{$_SERVER['HTTP_HOST']}/lang - returns list of available languages;</br>";
+        $message .= "GET http://{$_SERVER['HTTP_HOST']}/year/{language}/{year}/{limit=100} - returns list of top repository by year;</br>";
+        $message .= "GET http://{$_SERVER['HTTP_HOST']}/month/{language}/{year}/{month}/{limit=100} - returns list of top repository by month;</br>";
+        $message .= "Examples:</br>";
+        $message .= "http://{$_SERVER['HTTP_HOST']}/api/v1/month/php/2016/02 - returns list of top 100 'PHP' repository by february 2016;</br>";
+        $message .= "http://{$_SERVER['HTTP_HOST']}/api/v1/year/top/2015/5 - returns list of top 5 all languages repository by 2015;</br>";
 
-//        $message .= "+  - GET /bets/stat/{team1}/{team2} - return quantity, percentage end sum amount bets of all recepients countries by match;</br>";
-//        $message .= "+  - POST /bets - create new bet;</br>";
         return $message;
+    }
+
+    public function lang(Application $app)
+    {
+        $data = $app["repository.toprep"]->getLanguages();
+
+        return new Response(stripcslashes(json_encode($data)));
     }
 
     public function topYear(Application $app, $table, $year, $limit)
     {
-        $top = $app["repository.toprep"]->getTopRepByYear($table, $year, $limit);
+        $data = $app["repository.toprep"]->getTopRepByYear($table, $year, $limit);
 
-        if(!$top){
-            return $app->json("Not found", 400);
+        if (!$data) {
+            throw new NotFoundHttpException;
         }
-        return $app->json($top);
+       var_dump($app["response"]);
+        return new Response(stripcslashes(json_encode($data)));
     }
 
     public function topMonth(Application $app, $table, $year, $month, $limit)
     {
 
-        $top = $app["repository.toprep"]->getTopRepByMonth($table, $year, $month, $limit);
+        $data = $app["repository.toprep"]->getTopRepByMonth($table, $year, $month, $limit);
 
-        if(!$top){
-            return $app->json("Not found", 400);
+        if (!$data) {
+            throw new NotFoundHttpException;
         }
 
-        return $app->json($top);
-//        $stat = $app['repo.bet']->getStat($team1, $team2);
-//
-//        if (!$stat) {
-//            $app['monolog']->addWarning(sprintf("Match %s vs %s not be found", $team1, $team2));
-//            return $app->json(['error' => "Match {$team1} vs {$team2} not be found"], 404);
-//        }
-//        return $app->json($stat, 200);
+        return new Response(stripcslashes(json_encode($data)));
     }
-//
-//    public function save(Application $app, Request $request)
-//    {
-//        $bet = $app['bet.model']->validateAndFill($request->request->all(), $app);
-//        if (is_array($bet)) {
-//            $app['monolog']->addWarning("Error bet creating", [$bet, $request->request->all()]);
-//            return $app->json($bet, 400);
-//        }
-//        $app['repo.bet']->saveBet($bet);
-//        return $app->json(['created' => 'bet'], 201);
-//    }
 }
