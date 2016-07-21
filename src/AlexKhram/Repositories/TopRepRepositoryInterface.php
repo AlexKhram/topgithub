@@ -43,5 +43,12 @@ interface TopRepRepositoryInterface
      */
     public function getTopRepByMonth($table, $year, $month, $limit = 100);
 
+    /**
+     * Get list of of available languages (db tables)
+     *
+     *
+     * @return array of available languages (db tables)
+     */
+    public function getLanguages();
 
 }
